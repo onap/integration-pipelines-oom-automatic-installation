@@ -1,0 +1,270 @@
+---
+stages:
+  - test
+  - clean
+  - prepare
+  - configure_core
+  - deploy_core
+  - wait_core
+  - configure_small
+  - deploy_small
+  - wait_small
+  - configure_medium
+  - deploy_medium
+  - wait_medium
+  - configure_full
+  - deploy_full
+  - wait_full
+  - postinstall
+  - postconfigure
+
+variables:
+  target_folder: /opt/auto_oom
+  use_jumphost: "true"
+  pod_description_name: pod4
+  pod_fqdn: opnfv.fr
+  jumphost_user: opnfv
+  branch: master
+  pod: pod4
+  DEPLOYMENT_REQUESTED: full
+  ANSIBLE_DOCKER_IMAGE:
+    registry.gitlab.com/orange-opensource/lfn/ci_cd/docker_ansible_openstacksdk
+  ANSIBLE_DOCKER_TAG: "2.10"
+  CHAINED_CI_INIT: scripts/chained-ci-init.sh
+  GIT_SUBMODULE_STRATEGY: recursive
+
+.syntax_checking: &syntax_docker
+  stage: test
+  extends: .syntax_checking_tags
+  except:
+    - schedules
+    - triggers
+    - web
+    - pipelines
+    - external
+
+.deployment_and_test: &deployment_and_test
+  image: ${ANSIBLE_DOCKER_IMAGE}:${ANSIBLE_DOCKER_TAG}
+  extends: .ansible_run_tags
+  artifacts:
+    paths:
+      - vars/openstack_infos.yml
+      - vars/cluster.yml
+      - vars/hosts
+    when: always
+  before_script:
+    - curl -s ifconfig.me || true
+    - chmod 700 .
+    - . ./${CHAINED_CI_INIT} -a -i inventory/infra
+  after_script:
+    - ./scripts/clean.sh
+  #retry: 1
+
+yaml_checking:
+  image: docker.nexus.azure.onap.eu/sdesbure/yamllint:latest
+  script:
+    - yamllint .gitlab-ci.yml
+    - yamllint *.y?ml
+    - yamllint inventory/group_vars/all.yaml
+    - yamllint roles/*/tasks/*.y?ml
+  <<: *syntax_docker
+
+ansible_linting:
+  image: docker.nexus.azure.onap.eu/sdesbure/ansible-lint:latest
+  script:
+    - ansible-lint -x ANSIBLE0010,ANSIBLE0013 onap-*.yaml
+  <<: *syntax_docker
+
+# Clean
+clean:
+  stage: clean
+  script:
+    - ./run.sh clean
+  <<: *deployment_and_test
+  only:
+    variables:
+      - $CLEAN == 'True'
+      - $CLEAN == 'true'
+      - $CLEAN == 'Yes'
+      - $CLEAN == 'yes'
+    refs:
+      - schedules
+      - triggers
+      - web
+  retry: 2
+
+# Prepare
+prepare:
+  stage: prepare
+  only:
+    - schedules
+    - triggers
+    - web
+    - external
+    - pipelines
+  script:
+    - ./run.sh prepare
+  <<: *deployment_and_test
+
+# Configure
+.configure: &configure
+  script:
+    - ./run.sh configure
+  <<: *deployment_and_test
+
+.core: &core
+  only:
+    refs:
+      - schedules
+      - triggers
+      - web
+      - external
+      - pipelines
+    variables:
+      - $DEPLOYMENT_REQUESTED == "core"
+
+.small: &small
+  only:
+    refs:
+      - schedules
+      - triggers
+      - web
+      - external
+      - pipelines
+    variables:
+      - $DEPLOYMENT_REQUESTED == "small"
+
+.medium: &medium
+  only:
+    refs:
+      - schedules
+      - triggers
+      - web
+      - external
+      - pipelines
+    variables:
+      - $DEPLOYMENT_REQUESTED == "medium"
+
+.full: &full
+  only:
+    refs:
+      - schedules
+      - triggers
+      - web
+      - external
+      - pipelines
+    variables:
+      - $DEPLOYMENT_REQUESTED == "full"
+
+configure_core:
+  stage: configure_core
+  variables:
+    DEPLOYMENT_TYPE: core
+  <<: *core
+  <<: *configure
+
+configure_small:
+  stage: configure_small
+  variables:
+    DEPLOYMENT_TYPE: small
+  <<: *small
+  <<: *configure
+
+configure_medium:
+  stage: configure_medium
+  variables:
+    DEPLOYMENT_TYPE: medium
+  <<: *medium
+  <<: *configure
+
+configure_full:
+  stage: configure_full
+  variables:
+    DEPLOYMENT_TYPE: full
+  <<: *configure
+  <<: *full
+
+# Deploy
+.deploy: &deploy
+  script:
+    - ./run.sh deploy
+  <<: *deployment_and_test
+
+deploy_core:
+  stage: deploy_core
+  <<: *core
+  <<: *deploy
+
+deploy_small:
+  stage: deploy_small
+  <<: *small
+  <<: *deploy
+
+deploy_medium:
+  stage: deploy_medium
+  <<: *medium
+  <<: *deploy
+
+deploy_full:
+  stage: deploy_full
+  <<: *full
+  <<: *deploy
+
+.wait: &wait
+  allow_failure: true
+  timeout: 1h
+  script:
+    - ./run.sh wait
+  <<: *deployment_and_test
+
+wait_for_end_of_install_core:
+  stage: wait_core
+  <<: *core
+  <<: *wait
+
+wait_for_end_of_install_small:
+  stage: wait_small
+  <<: *small
+  <<: *wait
+
+wait_for_end_of_install_medium:
+  stage: wait_medium
+  <<: *medium
+  <<: *wait
+
+wait_for_end_of_install_full:
+  stage: wait_full
+  <<: *full
+  <<: *wait
+
+# Postconfiguration
+postconfiguration:
+  stage: postconfigure
+  allow_failure: true
+  only:
+    - schedules
+    - triggers
+    - web
+    - external
+    - pipelines
+  script:
+    - ./run.sh postconfiguration
+  <<: *deployment_and_test
+
+  # Postconfiguration
+postinstallation:
+  stage: postinstall
+  only:
+    - schedules
+    - triggers
+    - web
+    - external
+    - pipelines
+  dependencies:
+    - configure_full
+    - configure_core
+    - configure_small
+    - configure_medium
+  script:
+    - ./run.sh postinstallation
+  <<: *deployment_and_test

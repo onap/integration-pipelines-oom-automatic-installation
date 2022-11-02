@@ -1,0 +1,7 @@
+onap_timeout: 900
+
+helm_env: {}
+
+helm_env_postgres:
+  HELM_DRIVER: sql
+  HELM_DRIVER_SQL_CONNECTION_STRING: "{{ postgres_url }}"

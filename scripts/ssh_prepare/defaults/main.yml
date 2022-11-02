@@ -1,0 +1,4 @@
+---
+# variable needed to access jumphost
+ssh_id_rsa: "{{ vault_ssh_id_rsa }}"
+ssh_id_rsa_pub: "{{ vault_ssh_id_rsa_pub }}"

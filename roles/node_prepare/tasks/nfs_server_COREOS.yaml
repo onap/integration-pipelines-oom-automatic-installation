@@ -1,0 +1,4 @@
+---
+- name: override default nfs daemon name
+  ansible.builtin.set_fact:
+    nfs_daemon: nfsd

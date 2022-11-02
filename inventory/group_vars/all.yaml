@@ -1,0 +1,106 @@
+---
+oom_path: /opt/oom
+onap_base_url: https://gerrit.onap.org/r
+oom_url: "{{ onap_base_url}}/oom"
+branch: "{{ lookup('env','OOM_BRANCH')| default('master', true) }}"
+nfs_folder: /dockerdata-nfs
+
+generic_override_path: "{{ oom_path }}/kubernetes/onap/resources/overrides"
+onap_kubernetes_path: "{{ oom_path }}/kubernetes/onap"
+onap_chart_path: "{{ onap_kubernetes_path }}/Chart.yaml"
+contrib_path: "{{ oom_path }}/kubernetes/contrib"
+charts_path: "{{ oom_path }}/kubernetes/dist/packages"
+
+# Openstack needed variables
+openstack_tenant_name: "{{ lookup('env','TENANT_NAME') |
+  default(os_infra.tenant.name, true) }}"
+openstack_user_name: "{{ lookup('env','USER_NAME') |
+  default(os_infra.user.name, true) }}"
+
+base_dir: "{{ lookup('env', 'RUN_ROOT') | default(playbook_dir, true) }}"
+
+# ONAP needed variables
+onap_namespace: "{{ lookup('env', 'ONAP_NAMESPACE') | default('onap', true) }}"
+chart_name: "{{ lookup('env', 'ONAP_CHART_NAME') | default(onap_namespace, true) }}"
+onap_release_name: "{{ lookup('env', 'ONAP_RELEASE_NAME') | default('onap', true) }}"
+
+helm_version: "{{ lookup('env', 'HELM_VERSION') | default('v3.8.2', true) }}"
+use_servicemesh: "{{ lookup('env', 'SERVICEMESH') | default(False, true) }}"
+use_ingress: "{{ lookup('env', 'INGRESS') | default(False, true) }}"
+use_metrics: "{{ lookup('env', 'METRICS') | default(False, true) }}"
+use_custom_resources_metrics:
+    "{{ lookup('env', 'METRICS_CRD') | default(False, true) }}"
+
+# variable needed to access jumphost
+ssh_id_rsa: "{{ vault_ssh_id_rsa }}"
+gather_nodes_fact: "{{ lookup('env','GATHER_NODE_FACTS') |
+  default(true, true) }}"
+
+oom_etc_path: "{{ ansible_user_dir }}/oom/{{ branch }}"
+onap_all_file: "{{ generic_override_path }}/{{ use_ingress|
+  ternary('onap-all-ingress-nginx-vhost', 'onap-all') }}.yaml"
+#onap_all_file: "{{ generic_override_path }}/{{ use_servicemesh|
+#  ternary('onap-all-ingress-istio', 'onap-all') }}.yaml"
+override_file: "{{ oom_etc_path }}/onap-overrides.yaml"
+override_components: "{{ oom_etc_path }}/onap-components.yaml"
+override_gating_component: "{{ oom_etc_path }}/gating-component-overrides.yaml"
+deployment_file: "{{ oom_etc_path }}/deployment.yaml"
+repository: "{{ lookup('env', 'ONAP_REPOSITORY') |
+  default('nexus3.onap.org:10001', true) }}"
+proxy_for_dockerhub: "{{ lookup('env', 'DOCKER_HUB_PROXY') |
+  default('', true) }}"
+proxy_for_elastic: "{{ lookup('env', 'ELASTIC_PROXY') |
+  default('', true) }}"
+proxy_for_k8s_gcr: "{{ lookup('env', 'K8S_GCR_PROXY') |
+  default('', true) }}"
+
+deployment_requested: "{{ lookup('env', 'DEPLOYMENT_REQUESTED') | default('full', true)"
+
+deployment_type: "{{ lookup('env','DEPLOYMENT_TYPE')| default('core', true) }}"
+
+gerrit_review: "{{ lookup('env', 'GERRIT_REVIEW') | default('', true) }}"
+
+gerrit_patchset: "{{ lookup('env', 'GERRIT_PATCHSET') | default('', true) }}"
+
+project: "{{ lookup('env', 'PROJECT') | default('oom', true) }}"
+
+project_dir_mapping:
+  aai/oom: kubernetes/aai
+  testsuite/oom: kubernetes/robot
+
+# deployment_type variable
+core_onap: "{{ (deployment_type == 'core') }}"
+small_onap: "{{ (deployment_type == 'small') }}"
+medium_onap: "{{ (deployment_type == 'medium') }}"
+full_onap: "{{ (deployment_type == 'full') }}"
+nbi_working_tag: "2.1.1"
+onap_flavor: "{{ lookup('env','ONAP_FLAVOR')| default('small', true) }}"
+additional_components: "{{ lookup('env','ADDITIONAL_COMPONENTS') |
+  default('', true) }}"
+
+portal_enabled: "{{ small_onap or  medium_onap or
+  ('portal' in additional_components) }}"
+
+strimzi_version: "{{ lookup('env', 'STRIMZI_VERSION') | default('0.31.1', true) }}"
+onap_version: "{{ onap_versions[branch] | default('11.0.0') }}"
+
+onap_versions:
+  master: 11.0.0
+  kohn: 11.0.0
+  jakarta: 10.0.0
+
+use_global_storage: "{{ os_infra.onap.global_storage.enabled | default(false) }}"
+
+helmv3_use_sql: "{{ lookup('env','HELM3_USE_SQL') |
+  default(False, true) }}"
+
+postgres_namespace: helm
+postgres_svc: postgres
+postgres_secret_name: postgres-postgresql
+postgres_user: helm
+postgres_db: helm
+postgres_port: 30347
+postgres_url: "postgresql://{{
+  postgres_svc }}.{{ postgres_namespace }}:{{ postgres_port }}/{{
+  postgres_db }}?user={{ postgres_user }}&password={{
+  postgres_password }}&sslmode=disable"

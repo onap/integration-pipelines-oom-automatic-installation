@@ -1,0 +1,8 @@
+---
+helm_server_port: 8879
+helm_path: /usr/local/bin/helm
+chartmuseum_path: /usr/local/bin/chartmuseum
+# new values can be found here: https://github.com/fishworks/fish-food/blob/main/Food/chartmuseum.lua
+chartmuseum_version: v0.12.0
+chartmuseum_sha: 53402edf5ac9f736cb6da8f270f6bbf356dcbbe5592d8a09ee6f91a2dc30e4f6
+helm_push_version: v0.10.3

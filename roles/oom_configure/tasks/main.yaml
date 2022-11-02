@@ -1,0 +1,210 @@
+---
+- name: fetch cloud config
+  ansible.builtin.fetch:
+    dest: /tmp/clouds.yaml
+    src: "{{ ansible_user_dir }}/.config/openstack/clouds.yaml"
+    flat: "yes"
+
+- name: load cloud config
+  include_vars: /tmp/clouds.yaml
+
+- name: initialize os_auth_url
+  ansible.builtin.set_fact:
+    os_auth_url: "{{ clouds[openstack_user_name].auth.auth_url }}"
+
+- name: add v3 at end of os_auth_url
+  ansible.builtin.set_fact:
+    os_auth_url:
+      "{{ ((os_auth_url[-3:] == 'v3/') or (os_auth_url[-2:] == 'v3')) |
+      ternary(os_auth_url | regex_replace('/$', ''),
+      (os_auth_url[-1:] == '/') | ternary(
+      os_auth_url ~ 'v3',
+      os_auth_url ~ '/v3')) }}"
+
+- name: set tenant id
+  ansible.builtin.set_fact:
+    tenant_id: "{{ clouds[openstack_user_name].auth.project_id }}"
+  when: clouds[openstack_user_name].auth.project_id is defined
+
+- name: retrieve tenant id
+  block:
+    - name: load cloud config
+      openstack.cloud.os_client_config:
+
+    # - name: retrieve info from VNF tenant
+    #   os_project_facts:
+    #     cloud: "{{ openstack_user_name }}"
+    #     name: "{{ openstack_tenant_name }}"
+    #   register: tenant
+    # ISSUE with shade: You are not authorized to perform the requested action:
+    # identity:list_projects.
+    #
+    # - name: retrieve tenant ID
+    #   set_fact:
+    #     tenant_id: "{{ tenant.ansible_facts.openstack_projects.0.id }}"
+
+    - name: retrieve info from VNF tenant -- bash way
+      shell: >-
+        set -o pipefail && \
+        openstack --os-cloud {{ openstack_user_name }} project list -f json |
+        jq -r '[.[]| select(.Name=="{{ openstack_tenant_name }}") | .ID] |
+        first'
+      args:
+        executable: /bin/bash
+      changed_when: False
+      register: tenant
+
+    - name: retrieve tenant ID -- bash way
+      ansible.builtin.set_fact:
+        tenant_id: "{{ tenant.stdout_lines.0 }}"
+  when: clouds[openstack_user_name].auth.project_id is not defined
+
+- name: generate openstack info file
+  ansible.builtin.copy:
+    content: |
+      openstack_user_name: {{ openstack_user_name }}
+      openstack_tenant_name: {{ openstack_tenant_name }}
+      openstack_tenant_id: {{ tenant_id }}
+    dest: "{{ base_dir }}/vars/openstack_infos.yml"
+  delegate_to: localhost
+
+- name: generate encrypted password for robot
+  shell: |
+    set -o pipefail &&\
+    echo -n '{{ clouds[openstack_user_name].auth.password }}' |
+    openssl aes-128-ecb -e -K `cat encryption.key` -nosalt |
+    xxd -c 256 -p
+  args:
+    chdir: "{{ oom_path }}/kubernetes/so/resources/config/mso"
+    executable: /bin/bash
+  changed_when: false
+  register: shell
+
+- name: save robot encrypted password
+  ansible.builtin.set_fact:
+    robot_encrypted_password: "{{ shell.stdout }}"
+
+- name: set so_crypto container name
+  set_fact:
+    so_crypto: "{{ proxy_for_dockerhub }}/sdesbure/so_crypto"
+  when: proxy_for_dockerhub | bool
+
+- name: set so_crypto container name
+  set_fact:
+    so_crypto: "sdesbure/so_crypto"
+  when: not proxy_for_dockerhub | bool
+
+- name: generate encrypted password for so
+  shell: >
+    docker run --rm {{ so_crypto }}
+    {{ clouds[openstack_user_name].auth.password }}
+    `cat encryption.key`
+  args:
+    chdir: "{{ oom_path }}/kubernetes/so/resources/config/mso"
+  changed_when: False
+  register: shell
+
+- name: save so encrypted password
+  ansible.builtin.set_fact:
+    encrypted_password: "{{ shell.stdout }}"
+
+- name: create config override directory
+  ansible.builtin.file:
+    path: "{{ oom_etc_path }}"
+    recurse: "yes"
+    state: directory
+
+- name: check if a deployment has already been done
+  ansible.builtin.stat:
+    path: "{{ deployment_file }}"
+  register: deployment_stat
+
+- name: get deployment.yaml
+  when: deployment_stat.stat.exists
+  block:
+    - name: create temporary local file for deployment.yaml
+      ansible.builtin.tempfile:
+        state: file
+        suffix: temp
+      register: tmp_deployment
+      delegate_to: "127.0.0.1"
+
+    - name: fetch deployment info
+      ansible.builtin.fetch:
+        dest: "{{ tmp_deployment.path }}"
+        src: "{{ deployment_file }}"
+        flat: "yes"
+
+    - name: load deployment info
+      include_vars:
+        file: "{{ tmp_deployment.path }}"
+
+    - name: change deployment type if needed
+      ansible.builtin.set_fact:
+        deployment_type: "{{ deployment }}"
+      when: deployment_type == "micro" or
+        (deployment_type == "small" and deployment != "micro" ) or
+        deployment == "full"
+
+  always:
+    - name: destroy the local tmp_deployment
+      ansible.builtin.file:
+        path: "{{ tmp_deployment.path }}"
+        state: absent
+      delegate_to: "127.0.0.1"
+
+- name: "generate config override template for deployment {{ deployment_type }}"
+  ansible.builtin.template:
+    src: onap-overrides.yaml.j2
+    dest: "{{ override_file }}"
+
+- name: check if pre generated component override file exists
+  ansible.builtin.stat:
+    path: "{{ base_dir }}/vars/components-overrides.yml"
+  delegate_to: localhost
+  register: stat
+
+- name: copy pre generated component override file
+  ansible.builtin.copy:
+    dest: "{{ override_components }}"
+    src: "{{ base_dir }}/vars/components-overrides.yml"
+  when: stat.stat.exists
+
+- name: "generate config override template for deployment {{ deployment_type }}"
+  ansible.builtin.template:
+    src: components-overrides.yaml.j2
+    dest: "{{ override_components }}"
+  when: (not stat.stat.exists) and (core_onap or small_onap or medium_onap)
+
+- name: "generate so override template"
+  ansible.builtin.template:
+    src: so-overrides.yaml.j2
+    dest: "{{ override_gating_component }}"
+  when: project == 'so'
+
+- name: save on which step we are
+  ansible.builtin.copy:
+    content: |
+      ---
+      deployment: {{ deployment_type }}
+    dest: "{{ deployment_file }}"
+
+- name: "[facts retrieved] get first node IP address (case ip not defined)"
+  ansible.builtin.set_fact:
+    first_node_ip: "{{
+      hostvars[groups['kube-node'].0].ansible_default_ipv4.address }}"
+  when: gather_nodes_fact
+
+- name: "[No Facts retrieved] get first node IP address (case ip not defined)"
+  ansible.builtin.set_fact:
+    first_node_ip: "{{ hostvars[groups['kube-node'].0].ip }}"
+  when: not gather_nodes_fact
+
+- name: generate etc/hosts for utilities
+  become: "yes"
+  ansible.builtin.blockinfile:
+    path: /etc/hosts
+    marker: "# {mark} ANSIBLE MANAGED UTILITIES HOSTS"
+    block: |
+      {{ first_node_ip }} minio.minio
+      {{ first_node_ip }} {{ postgres_svc }}.{{ postgres_namespace }}

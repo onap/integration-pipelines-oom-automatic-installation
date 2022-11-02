@@ -1,0 +1,199 @@
+---
+- name: check if onap/Chart.yaml file exists
+  ansible.builtin.stat:
+    path: "{{ onap_chart_path }}"
+  register: onap_chart_stat
+
+- name: load onap/Chart.yaml
+  ansible.builtin.slurp:
+    src: "{{ onap_chart_path }}"
+  register: onap_chart_content
+  when: onap_chart_stat.stat.exists
+
+- name: set version according to release found in onap chart
+  set_fact:
+    onap_version:
+        "{{ (onap_chart_content['content'] | b64decode | from_yaml).version }}"
+  when: onap_chart_stat.stat.exists
+
+- name: show version that will be used
+  debug:
+    msg: "will deploy onap version {{ onap_version }}"
+
+- name: check if a environment.yaml exists
+  ansible.builtin.stat:
+    path: "{{ generic_override_path }}/environment.yaml"
+  register: environment_stat
+
+- name: set environment.yaml override
+  ansible.builtin.set_fact:
+    environment_override: "--values {{ generic_override_path }}/environment.yaml"
+  when: environment_stat.stat.exists
+
+- name: do not set environment.yaml override
+  ansible.builtin.set_fact:
+    environment_override: ""
+  when: not environment_stat.stat.exists
+
+- name: check if a onap-components.yaml exists
+  ansible.builtin.stat:
+    path: "{{ override_components }}"
+  register: component_stat
+
+- name: set onap-components.yaml override
+  ansible.builtin.set_fact:
+    component_override: "--values {{ override_components }}"
+  when: component_stat.stat.exists
+
+- name: do not set onap-components.yaml override
+  ansible.builtin.set_fact:
+    component_override: ""
+  when: not component_stat.stat.exists
+
+- name: check if a component-gating-overrides.yaml exists
+  ansible.builtin.stat:
+    path: "{{ override_gating_component }}"
+  register: gating_stat
+
+- name: set component-gating-overrides.yaml override
+  ansible.builtin.set_fact:
+    so_override: "--values {{ override_gating_component }}"
+  when: gating_stat.stat.exists and project == "so"
+
+- name: do not set component-gating-overrides.yaml override
+  ansible.builtin.set_fact:
+    so_override: ""
+  when: not gating_stat.stat.exists or project != "so"
+
+- name: check helm version
+  command: "helm version --template {% raw %}'{{.Version}}'{% endraw %}"
+  register: helm_version
+
+# Return of previous command will be "v3.3.4" for v3 and up and "<no value>"
+# for version 2.
+- name: store helm version
+  ansible.builtin.set_fact:
+    helmv3: "{{ ('<' in helm_version.stdout) | ternary(false, true) }}"
+
+- name: "HELM 3 not installed - stop playbook"
+  ansible.builtin.fail:
+    msg: HELM 3 not installed
+  when: not helmv3
+
+- name: set timeout
+  set_fact:
+    onap_timeout: "{{ onap_timeout }}s"
+
+- name: retrieve helm postgres secret
+  community.kubernetes.k8s_info:
+    api_version: v1
+    kind: Secret
+    name: "{{ postgres_secret_name }}"
+    namespace: "{{ postgres_namespace }}"
+  register: postgres_secrets
+  when: helmv3_use_sql|bool
+
+- name: retrieve helm postgres password
+  set_fact:
+    postgres_password: "{{
+      postgres_secrets.resources[0].data['postgresql-password'] | b64decode }}"
+  when: helmv3_use_sql|bool
+
+- name: set helm environment with postgres
+  set_fact:
+      helm_env: "{{ helm_env_postgres }}"
+  when: helmv3_use_sql|bool
+
+- name: update helm repo
+  command: "helm repo up"
+
+- name: create ONAP namespace
+  run_once: "yes"
+  community.kubernetes.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ onap_namespace }}"
+        labels:
+          istio-injection: "{{ (os_infra.onap.istioEnabled | default(true)) |
+            ternary ('enabled', 'disabled') }}"
+          name: "{{ onap_namespace }}"
+
+- name: generate command line for launch
+  set_fact:
+    helm_launch: >
+      helm deploy {{ chart_name }} local/onap
+        --namespace {{ onap_namespace }}
+        --version {{ onap_version }}
+        --values {{ onap_all_file }}
+        {{ environment_override }}
+        --values {{ override_file }}
+        {{ component_override }}
+        {{ so_override }}
+        --timeout {{ onap_timeout }}
+
+- name: show deploy execution command line
+  debug:
+    var: helm_launch
+
+- name: "[HELMv3] launch installation"
+  command: "{{ helm_launch }}"
+  register: yolo3
+  changed_when: true
+  async: 4800
+  poll: 0
+  when: helmv3
+  environment: "{{ helm_env }}"
+
+- name: "[HELMv3] wait for helm deploy to finish"
+  async_status:
+    jid: "{{ yolo3.ansible_job_id }}"
+  register: job_result3
+  until: job_result3.finished
+  retries: 480
+  delay: 10
+  when: helmv3
+
+- name: "[HELMv3] see output"
+  ansible.builtin.debug:
+    msg: "{{ job_result3.stdout }}"
+  when: helmv3
+
+- name: check if a deployment has already been done
+  ansible.builtin.stat:
+    path: "{{ deployment_file }}"
+  register: deployment_stat
+
+- name: get deployment.yaml
+  when: deployment_stat.stat.exists
+  block:
+    - name: create temporary local file for deployment.yaml
+      ansible.builtin.tempfile:
+        state: file
+        suffix: temp
+      register: tmp_deployment
+      delegate_to: "127.0.0.1"
+
+    - name: fetch deployment info
+      ansible.builtin.fetch:
+        dest: "{{ tmp_deployment.path }}"
+        src: "{{ deployment_file }}"
+        flat: "yes"
+
+    - name: load deployment info
+      include_vars:
+        file: "{{ tmp_deployment.path }}"
+
+  always:
+    - name: destroy the local tmp_deployment
+      ansible.builtin.file:
+        path: "{{ tmp_deployment.path }}"
+        state: absent
+      delegate_to: "127.0.0.1"
+
+- name: grab a beer
+  ansible.builtin.debug:
+    msg: "          .:.\n        _oOoOo\n       \
+      [_|||||\n         |||||\n         ~~~~~"

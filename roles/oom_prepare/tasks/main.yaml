@@ -1,0 +1,242 @@
+---
+- name: remove oom directory
+  ansible.builtin.file:
+    path: "{{ oom_path }}"
+    state: absent
+
+- name: set review_path (oom case)
+  ansible.builtin.set_fact:
+    review_path: "{{ oom_path }}"
+  when: project == 'oom'
+
+- name: "clone oom {{ branch }}"
+  ansible.builtin.git:
+    repo: "{{ oom_url }}"
+    dest: "{{ oom_path }}"
+    version: "{{ branch }}"
+
+- name: "configure git" # noqa 303
+  shell: |
+    git config --global user.email "You@example.com";
+    git config --global user.name "Your Name"
+  changed_when: "false"
+
+- name: override helm path for CoreOS
+  ansible.builtin.set_fact:
+    helm_path: /home/core/bin/helm
+  when: ansible_os_family | lower == "coreos"
+
+- name: retrieve review_path and clone when not in oom case
+  block:
+    - name: set review_path (not oom case)
+      ansible.builtin.set_fact:
+        review_path: "{{ oom_path }}/{{ project_dir_mapping[project] }}"
+
+    - name: ensure review directory is not there
+      ansible.builtin.file:
+        path: "{{ review_path }}"
+        state: absent
+
+    - name: "clone {{ project }} {{ branch }}"
+      ansible.builtin.git:
+        repo: "{{ onap_base_url }}/{{ project }}"
+        dest: "{{ review_path }}"
+        version: "{{ branch }}"
+  when: project != 'oom' and 'oom' in project
+
+- name: generate review end of url
+  ansible.builtin.set_fact:
+    review_end_url: "{{ gerrit_review[-2:] }}/{{ gerrit_review }}/\
+      {{ gerrit_patchset }}"
+  when: gerrit_review and 'oom' in project
+
+- name: "retrieve change branch for project {{ project }}" # noqa 303
+  shell:
+    cmd: >
+      git pull --no-edit {{ onap_base_url }}/{{ project }}
+      refs/changes/{{ review_end_url }}
+    chdir: "{{ review_path }}"
+  when: gerrit_review and 'oom' in project
+
+- name: "retrieve right submodules if needed for oom {{ project }}" # noqa 303
+  shell:
+    cmd: >
+      git submodule update
+    chdir: "{{ review_path }}"
+  when: gerrit_review and project == 'oom'
+
+- name: check helm version
+  command: "helm version --template {% raw %}'{{.Version}}'{% endraw %}"
+  register: helm_version
+
+# Return of previous command will be "v3.3.4" for v3 and up and "<no value>"
+# for version 2.
+- name: store helm version
+  ansible.builtin.set_fact:
+    helmv3: "{{ ('<' in helm_version.stdout) | ternary(false, true) }}"
+
+- name: "HELM 3 not installed - stop playbook"
+  ansible.builtin.fail:
+    msg: HELM 3 not installed
+  when: not helmv3
+
+- name: create .local/helm folder
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.local/helm"
+    state: directory
+    recurse: "yes"
+
+- name: retrieve chartmuseum
+  become: true
+  ansible.builtin.get_url:
+    dest: "{{ chartmuseum_path }}"
+    url: "https://s3.amazonaws.com/chartmuseum/release/\
+      {{ chartmuseum_version }}/bin/linux/amd64/chartmuseum"
+    checksum: "sha256:{{ chartmuseum_sha }}"
+    mode: 0777
+
+- name: create chartmuseum folder
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.chartstorage"
+    state: directory
+
+- name: create .local/chartmuseum folder
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.local/chartmuseum"
+    state: directory
+    recurse: "yes"
+
+- name: start helm server
+  become: "yes"
+  shell: "start-stop-daemon --start --background --oknodo \
+    --chuid {{ ansible_user_uid }} --group {{ ansible_user_gid }} \
+    --exec {{ chartmuseum_path }} -- --port={{ helm_server_port }} \
+    --storage='local' --allow-overwrite --debug \
+    --storage-local-rootdir='{{ ansible_user_dir }}/.chartstorage' \
+    > {{ ansible_user_dir }}/.local/chartmuseum/chartmuseum.log 2>&1"
+  changed_when: "true"
+
+- name: list all helm repositories
+  command: "helm repo list -o json"
+  register: repos
+
+- name: remove all helm repositories
+  community.kubernetes.helm_repository:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ repos.stdout | from_json | map(attribute='name') | list }}"
+
+- name: add helm local repository
+  community.kubernetes.helm_repository:
+    name: local
+    repo_url: "http://127.0.0.1:{{ helm_server_port }}"
+
+- name: add helm local repository
+  community.kubernetes.helm_repository:
+    name: onap
+    repo_url: "http://127.0.0.1:{{ helm_server_port }}"
+
+- name: check if Helm cm-push plugin is installed
+  shell: "helm plugin  list | grep cm-push | grep 0.10 | wc -l"
+  register: helm_plugin_cm_push
+  changed_when: "false"
+
+- name: Install Helm cm-push plugin
+  command: "helm plugin install --version {{ helm_push_version }} https://github.com/chartmuseum/helm-push.git"
+  changed_when: "true"
+  when: helm_plugin_cm_push.stdout == "0"
+
+- name: Install Helm deploy plugin
+  community.kubernetes.helm_plugin:
+    plugin_path: "{{ oom_path }}/kubernetes/helm/plugins/deploy"
+    namespace: default
+    state: present
+
+- name: Install Helm undeploy plugin
+  community.kubernetes.helm_plugin:
+    plugin_path: "{{ oom_path }}/kubernetes/helm/plugins/undeploy"
+    namespace: default
+    state: present
+
+- name: Add Kafka Strimzi repository
+  community.kubernetes.helm_repository:
+    name: strimzi
+    repo_url: https://strimzi.io/charts/
+
+- name: Install kafka strimzi
+  community.kubernetes.helm:
+    name: strimzi-kafka-operator
+    chart_ref: strimzi/strimzi-kafka-operator
+    release_namespace: strimzi-system
+    create_namespace: true
+    chart_version: "{{ strimzi_version }}"
+    values:
+      watchAnyNamespace: True
+
+- name: compile helm packages
+  command: "make SKIP_LINT=TRUE all"
+  async: 3600
+  poll: 0
+  changed_when: "true"
+  args:
+    chdir: "{{ oom_path }}/kubernetes"
+  register: make_helm
+
+- name: "wait for helm compile to finish"
+  async_status:
+    jid: "{{ make_helm.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 360
+  delay: 10
+
+- name: "[review case] generate helm make logs filename"
+  set_fact:
+    helm_log: "make-{{ gerrit_review }}-{{ gerrit_patchset }}.log"
+  when: gerrit_review
+
+- name: "[normal case] generate helm make logs filename"
+  set_fact:
+    helm_log: "make-{{ branch }}.log"
+  when: not gerrit_review
+
+- name: save helm package output
+  copy:
+    dest: "{{ ansible_user_dir }}/.local/helm/{{ helm_log }}"
+    content: "{{ job_result.stdout }}"
+
+- name: "[WORKAROUND] readd helm local repository"
+  command: "helm repo add local http://127.0.0.1:{{ helm_server_port }}"
+  when: not helmv3
+
+- name: check if user clouds exists
+  stat:
+    path: "{{ base_dir }}/vars/user_cloud.yml"
+  delegate_to: localhost
+  register: stat
+
+- name: get user clouds
+  block:
+    - name: include user clouds info
+      include_vars:
+        file: "{{ base_dir }}/vars/user_cloud.yml"
+        name: user_cloud
+
+    - name: retrieve OpenStack user name
+      set_fact:
+        openstack_user_name: "{{ user_cloud | list | first }}"
+
+    - name: retrieve OpenStack informations
+      set_fact:
+        openstack_tenant_name:
+          "{{ user_cloud[openstack_user_name].auth.project_name }}"
+        os_auth_url:
+          "{{ user_cloud[openstack_user_name].auth.auth_url }}"
+
+    - name: generate openstack info file
+      copy:
+        content: |
+          openstack_user_name: {{ openstack_user_name }}
+          openstack_tenant_name: {{ openstack_tenant_name }}
+        dest: "{{ base_dir }}/vars/openstack_infos.yml"
+      delegate_to: localhost
