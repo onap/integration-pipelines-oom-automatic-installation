@@ -1,0 +1,25 @@
+---
+- hosts: kube-node
+  gather_facts: "no"
+  tasks:
+    - name: gather facts
+      setup:
+      when: gather_nodes_fact
+
+- hosts: kube-master
+  run_once: "yes"
+  vars_files:
+    - "vars/idf.yml"
+    - "vars/pdf.yml"
+  pre_tasks:
+    - name: check if openstack_infos exists
+      ansible.builtin.stat:
+        path: "{{ base_dir }}/vars/openstack_infos.yml"
+      delegate_to: localhost
+      register: stat
+
+    - name: include user clouds info
+      include_vars: "{{ base_dir }}/vars/openstack_infos.yml"
+      when: stat.stat.exists
+  roles:
+    - oom_configure

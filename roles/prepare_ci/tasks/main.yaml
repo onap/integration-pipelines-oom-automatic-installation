@@ -1,0 +1,64 @@
+---
+- name: load os specific configuration
+  include_vars: "{{ ansible_os_family | lower }}.yaml"
+  when: ansible_os_family | lower == "debian"
+
+- name: "[Debian] install needed packages"
+  include_role:
+    name: apt_install
+  vars:
+    environment: "{{ proxy_env }}"
+    packages: "{{ ci_packages }}"
+  when: ansible_os_family | lower == "debian"
+
+- name: "[Non Debian] install needed packages"
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ ci_packages }}"
+  when: ansible_os_family | lower != "debian"
+
+# Workaround
+# Conflict between the python3-yaml installed with the package manager
+# preventing the one from pip
+# Observed on daily/weekly on the 26th of June
+# ERROR: Cannot uninstall 'PyYAML'. It is a distutils installed project and
+# thus we cannot accurately determine which files belong to it which would lead
+# to only a partial uninstall.
+# As a workaround, we force the uninstallation of the python3-yaml package
+# before starting the installation
+- name: "[Debian] remove unexpected packages"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ ci_packages_to_be_removed }}"
+  when: ansible_os_family | lower == "debian"
+
+- name: "[Non Debian] remove unexpected packages"
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ ci_packages_to_be_removed }}"
+  when: ansible_os_family | lower != "debian"
+# End of Workaround
+
+- name: "[Python 2] install needed python packages"
+  pip:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ ci_python2_packages }}"
+  when: ansible_python_version is version('3', '<')
+
+- name: "[Python 3] install needed python packages"
+  pip:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ ci_python3_packages }}"
+  when: ansible_python_version is version('3', '>=')
+
+
+- name: allow oom_path parent directory to be usable by user
+  ansible.builtin.file:
+    path: "{{ oom_path.split('/')[0:-1] | join('/') }}"
+    state: directory
+    mode: 0777
