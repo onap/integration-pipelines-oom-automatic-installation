@@ -1,0 +1,52 @@
+---
+- name: check if chartmuseum script exists
+  ansible.builtin.stat:
+    path: "{{ contrib_path }}/tools/registry-initialize.sh"
+  register: chartmuseum_script
+
+- name: wait for chartmuseum to be up
+  run_once: true
+  community.kubernetes.k8s_info:
+    kind: Deployment
+    wait: true
+    name: "{{ onap_release_name }}-chartmuseum"
+    namespace: "{{ onap_namespace }}"
+    wait_sleep: 10
+    wait_timeout: 600
+  register: chartmuseum_deployment
+
+- name: run internal chart museum result push
+  run_once: true
+  ansible.builtin.shell: |
+    {{ contrib_path }}/tools/registry-initialize.sh -d {{ charts_path }}
+    for package in certInitializer repositoryGenerator readinessCheck postgres serviceAccount mongo common
+    do
+    {{ contrib_path }}/tools/registry-initialize.sh -d {{ charts_path }} -p $package
+    done
+  when: chartmuseum_script.stat.exists and
+        chartmuseum_deployment.resources|length > 0 and
+        chartmuseum_deployment.resources[0].status.availableReplicas > 0
+
+
+- name: fetch cloud config
+  ansible.builtin.fetch:
+    dest: /tmp/clouds.yaml
+    src: "{{ ansible_user_dir }}/.config/openstack/clouds.yaml"
+    flat: "yes"
+
+- name: load cloud config
+  include_vars: /tmp/clouds.yaml
+
+- name: initialize os_auth_url
+  ansible.builtin.set_fact:
+    os_auth_url: "{{ clouds[openstack_user_name].auth.auth_url }}"
+
+- name: add v3 at end of os_auth_url
+  ansible.builtin.set_fact:
+    os_auth_url:
+      "{{ ((os_auth_url[-3:] == 'v3/') or (os_auth_url[-2:] == 'v3')) |
+        ternary(os_auth_url | regex_replace('/$', ''),
+          (os_auth_url[-1:] == '/') | ternary(
+            os_auth_url ~ 'v3',
+            os_auth_url ~ '/v3')) }}"
+

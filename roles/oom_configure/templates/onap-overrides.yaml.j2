@@ -1,0 +1,206 @@
+---
+global:
+  repository: {{ repository }}
+{% if proxy_for_dockerhub %}
+  dockerHubRepository: "{{ proxy_for_dockerhub }}"
+{% endif %}
+{% if proxy_for_k8s_gcr %}
+  googleK8sRepository: "{{ proxy_for_k8s_gcr }}"
+{% endif %}
+{% if proxy_for_elastic %}
+  elasticRepository: "{{ proxy_for_elastic }}"
+{% endif %}
+  flavor: {{ onap_flavor }}
+  masterPassword: gatingPassword
+{% if use_ingress %}
+  ingress:
+    enabled: true
+{% endif %}
+{% if use_servicemesh %}
+  serviceMesh:
+    enabled: true
+    tls: true
+  aafEnabled: false
+  cmpv2Enabled: false
+  tlsEnabled: false
+  msbEnabled: false
+{% endif %}
+
+{% if use_global_storage %}
+  persistence:
+    storageClass: {{ os_infra.onap.global_storage.class | default('-') }}
+{% endif %}
+{% if use_metrics %}
+  metrics:
+    enabled: true
+{% if use_custom_resources_metrics %}
+    custom_resources: true
+{% endif %}
+{% endif %}
+{% if use_global_storage and os_infra.onap.global_storage.fast_class is defined %}
+aaf:
+  aaf-cass:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+  aaf-sms:
+    aaf-sms-quorumclient:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+{% endif %}
+appc:
+  config:
+    enableClustering: false
+    openStackType: "OpenStackProvider"
+    openStackName: "OpenStack"
+    openStackKeyStoneUrl: {{ os_auth_url }}
+    openStackServiceTenantName: {{ openstack_service_tenant_name }}
+    openStackDomain: {{ clouds[openstack_user_name].auth.user_domain_name | default('Default') }}
+    openStackUserName: {{ openstack_user_name }}
+    openStackEncryptedPassword: "{{ encrypted_password }}"
+{% if use_global_storage and os_infra.onap.global_storage.fast_class is defined %}
+  mariadb-galera:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+{% endif %}
+cassandra:
+  liveness:
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 120
+  readiness:
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 60
+  startup:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 120
+{% if use_global_storage and os_infra.onap.global_storage.fast_class is defined %}
+  persistence:
+    storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+{% endif %}
+{% if use_global_storage and os_infra.onap.global_storage.rwx_class is defined %}
+cds:
+  cds-blueprints-processor:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.rwx_class }}"
+contrib:
+  netbox:
+    netbox-app:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.rwx_class }}"
+{% endif %}
+{% if use_global_storage and os_infra.onap.global_storage.fast_class is defined %}
+dcaegen2:
+  dcae-bootstrap:
+    postgres:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+  dcae-dashboard:
+    postgres:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+  dcae-inventory-api:
+    postgres:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+  dcae-redis:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+{% endif %}
+dcaegen2-services:
+  dcae-datafile-collector:
+    enabled: false
+  dcae-pm-mapper:
+    enabled: false
+{% if use_global_storage and os_infra.onap.global_storage.rwx_class is defined %}
+dcaemod:
+  dcaemod-genprocessor:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.rwx_class }}"
+{% endif %}
+{% if use_global_storage and os_infra.onap.global_storage.fast_class is defined %}
+dmaap:
+  dmaap-bc:
+    postgres:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+  dmaap-dr-prov:
+    mariadb-galera:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+  message-router:
+    message-router-kafka:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+    message-router-zookeeper:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+mariadb-galera:
+  persistence:
+    storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+modeling:
+  mariadb-galera:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+{% endif %}
+nbi:
+  config:
+    openStackRegion: {{ clouds[openstack_user_name].region_name }}
+    openStackVNFTenantId: {{ tenant_id }}
+    cloudOwner: {{ details.pod_owner }}
+{% if use_global_storage and os_infra.onap.global_storage.fast_class is defined %}
+oof:
+  music:
+    music-cassandra:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+    zookeeper:
+      persistence:
+        storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+{% endif %}
+robot:
+  config:
+    openStackEncryptedPasswordHere: "{{ robot_encrypted_password }}"
+{% if use_ingress %}
+  useIngressHost:
+      enabled: true
+{% endif %}
+{% if use_global_storage and os_infra.onap.global_storage.fast_class is defined %}
+sdc:
+  sdc-es:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+{% endif %}
+so:
+  so-catalog-db-adapter:
+    config:
+      openStackUserName: {{ openstack_user_name }}
+      openStackRegion: {{ clouds[openstack_user_name].region_name }}
+      openStackKeyStoneUrl: {{ os_auth_url }}
+      openStackServiceTenantName: {{ openstack_service_tenant_name }}
+      openStackEncryptedPasswordHere: "{{ encrypted_password }}"
+      openStackTenantId: {{ tenant_id }}
+      openStackKeystoneVersion: "KEYSTONE_V3"
+      openStackProjectDomainName:
+        {{ clouds[openstack_user_name].auth.user_domain_name | default('Default') }}
+      openStackUserDomainName:
+        {{ clouds[openstack_user_name].project_domain_name | default('Default') }}
+  so-mariadb:
+    config:
+      # gerrit branch where the latest heat code is checked in
+      gerritBranch: {{ branch }}
+{% if use_global_storage and os_infra.onap.global_storage.fast_class is defined %}
+vfc:
+  mariadb-galera:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+vid:
+  mariadb-galera:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+vnfsdk:
+  postgres:
+    persistence:
+      storageClassOverride: "{{ os_infra.onap.global_storage.fast_class }}"
+{% endif %}

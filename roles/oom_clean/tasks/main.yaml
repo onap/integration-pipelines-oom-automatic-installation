@@ -1,0 +1,151 @@
+---
+- name: check helm version
+  command: "helm version --template {% raw %}'{{.Version}}'{% endraw %}"
+  register: helm_version
+
+# Return of previous command will be "v3.3.4" for v3 and up and "<no value>"
+# for version 2.
+- name: store helm version
+  ansible.builtin.set_fact:
+    helmv3: "{{ ('<' in helm_version.stdout) | ternary(false, true) }}"
+
+- name: "HELM 3 not installed - stop playbook"
+  ansible.builtin.fail:
+    msg: HELM 3 not installed
+  when: not helmv3
+
+- name: "[HELM3] Remove previous installation"
+  include_tasks: helm3.yaml
+  when: helmv3
+
+- name: get number of remaining pods
+  command: >
+    kubectl get pods --namespace {{ onap_namespace }} --no-headers
+    -o custom-columns=NAME:.metadata.name
+  changed_when: False
+  register: pods
+
+- name: delete remaining faulty pods
+  command: >
+    kubectl delete pods --namespace {{ onap_namespace }} --force
+    --grace-period 0 {{ item }}
+  loop: "{{ pods.stdout_lines }}"
+  when: (pods.stdout_lines | length) <= (faulty_pods | length) and
+        ((item | regex_replace('^[a-zA-Z0-9]+-') |
+                 regex_replace('-[0-9a-z]+-[0-9a-z]+$')) in faulty_pods)
+  changed_when: True
+
+- name: get number of remaining jobs
+  command: >
+    kubectl get jobs --namespace {{ onap_namespace }} --no-headers
+    -o custom-columns=NAME:.metadata.name
+  changed_when: false
+  register: jobs
+
+- name: delete remaining faulty jobs
+  command: >
+    kubectl delete job --namespace {{ onap_namespace }} --force
+    --grace-period 0 {{ item }}
+  loop: "{{ jobs.stdout_lines }}"
+
+- name: get number of remaining pvcs
+  command: >
+    kubectl get pvc --namespace {{ onap_namespace }} --no-headers
+    -o custom-columns=NAME:.metadata.name
+  changed_when: false
+  register: pvcs
+
+- name: delete remaining faulty pvcs
+  command: >
+    kubectl delete pvc --namespace {{ onap_namespace }} --force
+    --grace-period 0 {{ item }}
+  loop: "{{ pvcs.stdout_lines }}"
+
+- name: check if namespace is for namespace full deletion
+  shell: |
+    set -o pipefail && kubectl get namespace {{ onap_namespace }}
+    -o jsonpath="{.status.phase}" || true
+  args:
+    executable: /bin/bash
+  register: ns_status
+  ignore_errors: yes
+  changed_when: False
+
+- name: delete onap namespace
+  community.kubernetes.k8s:
+    state: absent
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ onap_namespace }}"
+  when: (not ns_status.failed) and ('Terminating' not in ns_status.stdout)
+
+- name: delete onap tests namespace
+  community.kubernetes.k8s:
+    state: absent
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ onap_namespace }}-tests"
+  when: (not ns_status.failed) and ('Terminating' not in ns_status.stdout)
+
+- name: wait for namespace full deletion
+  shell: |
+    set -o pipefail && kubectl get namespace |
+    grep -c {{ onap_namespace }} || true
+  args:
+    executable: /bin/bash
+  register: kube
+  changed_when:
+    kube.stdout  == '0'
+  until:
+    kube.stdout  == '0'
+  retries: 600
+  delay: 1
+
+- name: list all remaining persistent volumes
+  shell: |
+    set -o pipefail &&
+    kubectl get pv -o=jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' |
+    grep {{ chart_name }} || true
+  args:
+    executable: /bin/bash
+  register: persistent_volumes
+  changed_when: "false"
+
+- name: remove remaining persistent volumes
+  shell: |
+    set -o pipefail && kubectl delete pv {{ item }} || true
+  args:
+    executable: /bin/bash
+  changed_when: "true"
+  loop: "{{ persistent_volumes.stdout_lines }}"
+
+- name: "list all onap directories in {{ nfs_folder }}"
+  ansible.builtin.find:
+    paths: "{{ nfs_folder }}"
+    recurse: no
+    file_type: directory
+  register: onap_directories
+
+- name: "delete onap directory in {{ nfs_folder }}"
+  become: "yes"
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ onap_directories.files }}"
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: delete component-gating-overrides.yaml if present
+  ansible.builtin.file:
+    path: "{{ override_gating_component }}"
+    state: absent
+
+- name: remove oom directory
+  become: "yes"
+  ansible.builtin.file:
+    path: "{{ oom_path }}"
+    state: absent

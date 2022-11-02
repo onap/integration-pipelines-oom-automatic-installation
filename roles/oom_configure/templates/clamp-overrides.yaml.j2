@@ -1,0 +1,7 @@
+---
+clamp:
+  repositoryOverride: registry.gitlab.com
+  image: orange-opensource/lfn/onap/build-clamp/onap/clamp-frontend:{{ gerrit_review }}-{{ gerrit_patchset }}
+  clamp-backend:
+    repositoryOverride: registry.gitlab.com
+    image: orange-opensource/lfn/onap/build-clamp/onap/clamp-backend:{{ gerrit_review }}-{{ gerrit_patchset }}

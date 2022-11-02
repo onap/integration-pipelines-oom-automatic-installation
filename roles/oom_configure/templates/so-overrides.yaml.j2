@@ -1,0 +1,63 @@
+---
+global:
+  soBaseImage: orange-opensource/lfn/onap/build-so/base-image:1.0
+so:
+  repositoryOverride: &gitlabRegistry registry.gitlab.com
+  image: orange-opensource/lfn/onap/build-so/api-handler-infra:{{ gerrit_review }}-{{ gerrit_patchset }}
+  soHelpers: &soHelpers
+    repositoryOverride: {{ repository }}
+    certInitializer:
+      repositoryOverride: {{ repository }}
+  so-bpmn-infra:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/bpmn-infra:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-catalog-db-adapter:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/catalog-db-adapter:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-cnf-adapter:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/mso-cnf-adapter:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-etsi-nfvo-ns-lcm:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/so-etsi-nfvo-ns-lcm:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-monitoring:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/so-monitoring:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-nssmf-adapter:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/nssmf-adapter:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-oof-adapter:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/so-oof-adapter:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-openstack-adapter:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/openstack-adapter:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-request-db-adapter:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/request-db-adapter:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-sdc-controller:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/sdc-controller:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-sdnc-adapter:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/sdnc-adapter:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-vfc-adapter:
+    repositoryOverride: {{ repository }}
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/vfc-adapter:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
+  so-vnfm-adapter:
+    repositoryOverride: *gitlabRegistry
+    image: orange-opensource/lfn/onap/build-so/vnfm-adapter:{{ gerrit_review }}-{{ gerrit_patchset }}
+    soHelpers: *soHelpers
