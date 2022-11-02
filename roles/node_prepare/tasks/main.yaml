@@ -1,0 +1,28 @@
+---
+# TODO: retrieve facts on Openstack to dynamically find subnet for etc export
+- name: install nfs
+  when: not use_global_storage
+  block:
+    - name: gather facts
+      setup:
+
+    - name: create nfs server on controller
+      import_tasks: nfs_server.yaml
+      when: inventory_hostname in groups['nfs-server']
+
+    - name: flush handlers
+      meta: flush_handlers
+
+    - name: mount dockerdata in nfs
+      import_tasks: nfs_client.yaml
+      when: inventory_hostname in groups['k8s-cluster'] and
+        inventory_hostname not in groups['nfs-server']
+
+    - name: put right value for max_map_count
+      become: "yes"
+      ansible.posix.sysctl:
+        name: vm.max_map_count
+        value: 1048575
+        sysctl_set: "yes"
+        state: present
+        reload: "yes"

@@ -1,0 +1,7 @@
+---
+ci_packages: []
+ci_packages_to_be_removed:
+  - python3-yaml
+ci_python3_packages: []
+ci_python2_packages: []
+proxy_env: {}

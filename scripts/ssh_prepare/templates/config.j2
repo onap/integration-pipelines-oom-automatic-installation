@@ -1,0 +1,33 @@
+Host *
+{% if creds_stat.stat.exists %}
+  IdentityFile {{ base_dir }}/id_rsa
+{% endif %}
+  UserKnownHostsFile=/dev/null
+  StrictHostKeyChecking=no
+
+{% if gw_stat.stat.exists %}
+{% for gw in ssh_gateways | default([]) %}
+host {{ gw.name }}
+  Hostname {{ gw.public_fqdn | default(gw.ansible_host) }}
+  User {{ gw.ansible_user }}
+{% if gw.ansible_port is defined %}
+  Port {{ gw.ansible_port }}
+{% endif %}
+{% if gw.proxy_command is defined %}
+  ProxyCommand  {{ gw.proxy_command }}
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% for node in groups.all %}
+{% if hostvars[node].ansible_host is defined %}
+host {{ node }} {{ hostvars[node].public_fqdn | default('') }} {{ hostvars[node].ansible_host }}
+  Hostname {{ hostvars[node].public_fqdn | default(hostvars[node].ansible_host) }}
+  User {{ hostvars[node].ansible_user }}
+{% if gw_stat.stat.exists %}
+  ProxyCommand ssh -F {{ base_dir }}/ssh_config -W %h:%p {{ ssh_gateways[0].name }}
+{% endif %}
+{% endif %}
+
+{% endfor %}
