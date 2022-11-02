@@ -1,0 +1,35 @@
+---
+- name: install packages
+  import_tasks: nfs_client_DEBIAN.yaml
+  when: ansible_os_family | lower == "debian"
+
+- name: Create mountable dir
+  become: "yes"
+  ansible.builtin.file:
+    path: "{{ nfs_folder }}"
+    state: directory
+    mode: 0777
+    owner: root
+    group: root
+
+- name: set mountpoints
+  become: "yes"
+  ansible.posix.mount:
+    name: "{{ nfs_folder }}"
+    src:
+      "{{ hostvars[groups['nfs-server'][0]].ansible_default_ipv4.address }}\
+      :{{ nfs_folder }}"
+    fstype: nfs4
+    dump: 0
+    passno: 2
+    opts: "nfsvers=4.1,rsize=131072,wsize=131072"
+    state: mounted
+
+- name: Ensure mountable dir is accessible to everyone
+  become: "yes"
+  ansible.builtin.file:
+    path: "{{ nfs_folder }}"
+    state: directory
+    mode: 0777
+    owner: root
+    group: root

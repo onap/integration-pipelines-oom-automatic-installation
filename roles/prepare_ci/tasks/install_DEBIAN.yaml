@@ -1,0 +1,11 @@
+---
+- name: load os specific configuration
+  include_vars: "debian.yaml"
+  when: ansible_os_family | lower == "debian"
+
+- name: "[Debian] install needed packages"
+  include_role:
+    name: apt_install
+  vars:
+    environment: "{{ proxy_env }}"
+    packages: "{{ ci_packages }}"
