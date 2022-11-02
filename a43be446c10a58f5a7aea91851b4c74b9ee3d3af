@@ -1,0 +1,7 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Michal Jagiello <michal.jagiello@t-mobile.pl>
+Submitted-by: Michal Jagiello <michal.jagiello@t-mobile.pl>
+Submitted-at: Wed, 02 Nov 2022 09:36:06 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/integration/pipelines/oom-automatic-installation/+/131672
+Project: integration/pipelines/oom-automatic-installation
+Branch: refs/heads/master
