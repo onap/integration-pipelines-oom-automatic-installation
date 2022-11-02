@@ -1,0 +1,464 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8964f2e2_20d13de8",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Still relevant?\nShould we just jump to 3.8.?",
+      "range": {
+        "startLine": 60,
+        "startChar": 10,
+        "endLine": 60,
+        "endChar": 21
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22082b40_a5246468",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Same commnet as above",
+      "range": {
+        "startLine": 97,
+        "startChar": 11,
+        "endLine": 97,
+        "endChar": 22
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ebbdbe9_61f84479",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Should strimzi and dbs be included in core?",
+      "range": {
+        "startLine": 147,
+        "startChar": 3,
+        "endLine": 147,
+        "endChar": 7
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "027de813_c42d9f34",
+        "filename": "inventory/group_vars/all.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Is this correct?",
+      "range": {
+        "startLine": 27,
+        "startChar": 60,
+        "endLine": 27,
+        "endChar": 65
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4246df88_a1dc5d2e",
+        "filename": "inventory/group_vars/all.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Still relevant",
+      "range": {
+        "startLine": 85,
+        "startChar": 3,
+        "endLine": 85,
+        "endChar": 9
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3405e7ee_aa4f7cac",
+        "filename": "inventory/group_vars/all.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "0.31.1",
+      "range": {
+        "startLine": 88,
+        "startChar": 67,
+        "endLine": 88,
+        "endChar": 71
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf4f10b4_b15c8de5",
+        "filename": "inventory/group_vars/all.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Should we go with N-1 versions.\nSame for list below",
+      "range": {
+        "startLine": 89,
+        "startChar": 51,
+        "endLine": 89,
+        "endChar": 53
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ddeffa3_1aaf439d",
+        "filename": "roles/oom_clean/tasks/helm2.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Still relevant?",
+      "range": {
+        "startLine": 2,
+        "startChar": 11,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82ffe066_738c1495",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "No longer deployed",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 7
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b717487c_2d4107ce",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "No longer deployed",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 13,
+        "endChar": 6
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6011f379_838047bf",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "No longer deployed",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cfca6b4_63e1f77a",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "No longer deployed",
+      "range": {
+        "startLine": 34,
+        "startChar": 2,
+        "endLine": 34,
+        "endChar": 6
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dc5b80a_a8c72d50",
+        "filename": "roles/oom_configure/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Looking to remove this openstack stuff from documentation. Don\u0027t think we should mandate using opoenstack",
+      "range": {
+        "startLine": 107,
+        "startChar": 10,
+        "endLine": 107,
+        "endChar": 21
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88cfd233_94df0432",
+        "filename": "roles/oom_configure/templates/components-overrides.yaml.j2",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Should we strip stuff that\u0027s no longer deployed/part of release?",
+      "range": {
+        "startLine": 112,
+        "startChar": 1,
+        "endLine": 112,
+        "endChar": 6
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d726e20_6d397da5",
+        "filename": "roles/oom_configure/templates/onap-overrides.yaml.j2",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Would really like to drop the openstack stuff if possible",
+      "range": {
+        "startLine": 54,
+        "startChar": 7,
+        "endLine": 54,
+        "endChar": 15
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6d283e7_d212a84a",
+        "filename": "roles/oom_generate_artifacts/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Does this conflict with ingress setup?",
+      "range": {
+        "startLine": 3,
+        "startChar": 11,
+        "endLine": 3,
+        "endChar": 15
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af3ea16a_638df1a7",
+        "filename": "roles/oom_generate_artifacts/tasks/loadbalancer_facts.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Is portal still relevant?",
+      "range": {
+        "startLine": 8,
+        "startChar": 18,
+        "endLine": 8,
+        "endChar": 24
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a6f465_ae4d03ce",
+        "filename": "roles/oom_launch/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Still needed/relevant?",
+      "range": {
+        "startLine": 147,
+        "startChar": 13,
+        "endLine": 147,
+        "endChar": 17
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a9b0658_1c491190",
+        "filename": "roles/oom_prepare/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Still relevant?",
+      "range": {
+        "startLine": 131,
+        "startChar": 13,
+        "endLine": 131,
+        "endChar": 17
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "052c7306_3edc65d9",
+        "filename": "roles/oom_prepare/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Any point in adding some parrallelism here?",
+      "range": {
+        "startLine": 281,
+        "startChar": 33,
+        "endLine": 281,
+        "endChar": 35
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}

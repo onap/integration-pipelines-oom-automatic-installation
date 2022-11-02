@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1542c627_c1f6e35e",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Is this still relevant?",
+      "range": {
+        "startLine": 62,
+        "startChar": 25,
+        "endLine": 62,
+        "endChar": 28
+      },
+      "revId": "9425bfe611718cba805a5e387bcbe32cd21212eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f204cb12_4d881cf4",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Is this still relevant?",
+      "range": {
+        "startLine": 97,
+        "startChar": 14,
+        "endLine": 97,
+        "endChar": 18
+      },
+      "revId": "9425bfe611718cba805a5e387bcbe32cd21212eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43b5deee_f0f2bbe8",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Should strimzi and databases be included in core?",
+      "range": {
+        "startLine": 147,
+        "startChar": 3,
+        "endLine": 147,
+        "endChar": 5
+      },
+      "revId": "9425bfe611718cba805a5e387bcbe32cd21212eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e24ffa10_c646e563",
+        "filename": "roles/oom_clean/tasks/helm2.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Do we still need helm2?",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 15
+      },
+      "revId": "9425bfe611718cba805a5e387bcbe32cd21212eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39da283c_8ee016ca",
+        "filename": "roles/oom_configure/templates/clamp-overrides.yaml.j2",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "I think clamp has been removed",
+      "range": {
+        "startLine": 4,
+        "startChar": 57,
+        "endLine": 4,
+        "endChar": 62
+      },
+      "revId": "9425bfe611718cba805a5e387bcbe32cd21212eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dab9e5de_f3fbb02c",
+        "filename": "roles/oom_prepare/templates/oom_patch.txt.j2",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "Not sure what this file does but is it still relevant?",
+      "range": {
+        "startLine": 16,
+        "startChar": 33,
+        "endLine": 16,
+        "endChar": 39
+      },
+      "revId": "9425bfe611718cba805a5e387bcbe32cd21212eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43dd8a4e_0a919b21",
+        "filename": "run.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-02T09:43:00Z",
+      "side": 1,
+      "message": "This still relevant?",
+      "range": {
+        "startLine": 130,
+        "startChar": 13,
+        "endLine": 130,
+        "endChar": 16
+      },
+      "revId": "9425bfe611718cba805a5e387bcbe32cd21212eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
