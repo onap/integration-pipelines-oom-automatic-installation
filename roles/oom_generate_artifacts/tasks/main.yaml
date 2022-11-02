@@ -1,0 +1,84 @@
+---
+- name: generate load balancer facts
+  import_tasks: loadbalancer_facts.yaml
+
+- name: update portal app to reflect this choice
+  command: |
+    kubectl patch svc portal-app -p \
+      '{"spec":{"externalIPs":["{{ portal_lb | ipaddr('address') }}"] }}' \
+      -n {{ onap_namespace }}
+  when: gather_nodes_fact and
+    portal_enabled and
+    ((portal_lb_ip is not defined) or (portal_lb_ip|length == 0)) and
+    ((portal_external_ip_check is not defined) or
+    portal_external_ip_check.failed)
+
+- name: generate etc/hosts
+  become: "yes"
+  ansible.builtin.blockinfile:
+    path: /etc/hosts
+    marker: "# {mark} ANSIBLE MANAGED OOM HOSTS"
+    block: |
+      {{ first_node_ip }} portal.api.simpledemo.onap.org
+      {{ first_node_ip }} vid.api.simpledemo.onap.org
+      {{ first_node_ip }} sdc.api.fe.simpledemo.onap.org
+      {{ first_node_ip }} sdc.api.be.simpledemo.onap.org
+      {{ first_node_ip }} portal-sdk.simpledemo.onap.org
+      {{ first_node_ip }} policy.api.simpledemo.onap.org
+      {{ first_node_ip }} aai.api.sparky.simpledemo.onap.org
+      {{ first_node_ip }} cli.api.simpledemo.onap.org
+      {{ first_node_ip }} msb.api.simpledemo.onap.org
+      {{ first_node_ip }} so.api.simpledemo.onap.org
+      {{ first_node_ip }} appc.api.simpledemo.onap.org
+      {{ first_node_ip }} sdnc.api.simpledemo.onap.org
+      {{ first_node_ip }} nbi.api.simpledemo.onap.org
+      {{ first_node_ip }} consul.api.simpledemo.onap.org
+      {{ first_node_ip }} kibana.api.simpledemo.onap.org
+      {{ first_node_ip }} mr.api.simpledemo.onap.org
+      {{ first_node_ip }} uui.api.simpledemo.onap.org
+      {{ first_node_ip }} aaf.api.simpledemo.onap.org
+      {{ first_node_ip }} clamp.api.simpledemo.onap.org
+      {{ first_node_ip }} robot.api.simpledemo.onap.org
+      {{ first_node_ip }} dcae.api.simpledemo.onap.org
+      {{ first_node_ip }} sdc.workflow.plugin.simpledemo.onap.org
+      {{ first_node_ip }} sdc.dcae.plugin.simpledemo.onap.org
+
+- name: generate hosts file for Non-Ingress Setup
+  ansible.builtin.copy:
+    dest: "{{ playbook_dir }}/vars/hosts"
+    content: |
+      {{ first_node_ip }} portal.api.simpledemo.onap.org
+      {{ first_node_ip }} vid.api.simpledemo.onap.org
+      {{ first_node_ip }} sdc.api.fe.simpledemo.onap.org
+      {{ first_node_ip }} sdc.api.be.simpledemo.onap.org
+      {{ first_node_ip }} portal-sdk.simpledemo.onap.org
+      {{ first_node_ip }} policy.api.simpledemo.onap.org
+      {{ first_node_ip }} aai.api.sparky.simpledemo.onap.org
+      {{ first_node_ip }} cli.api.simpledemo.onap.org
+      {{ first_node_ip }} msb.api.simpledemo.onap.org
+      {{ first_node_ip }} so.api.simpledemo.onap.org
+      {{ first_node_ip }} appc.api.simpledemo.onap.org
+      {{ first_node_ip }} sdnc.api.simpledemo.onap.org
+      {{ first_node_ip }} nbi.api.simpledemo.onap.org
+      {{ first_node_ip }} consul.api.simpledemo.onap.org
+      {{ first_node_ip }} kibana.api.simpledemo.onap.org
+      {{ first_node_ip }} mr.api.simpledemo.onap.org
+      {{ first_node_ip }} uui.api.simpledemo.onap.org
+      {{ first_node_ip }} aaf.api.simpledemo.onap.org
+      {{ first_node_ip }} clamp.api.simpledemo.onap.org
+      {{ first_node_ip }} robot.api.simpledemo.onap.org
+      {{ first_node_ip }} dcae.api.simpledemo.onap.org
+      {{ first_node_ip }} sdc.workflow.plugin.simpledemo.onap.org
+      {{ first_node_ip }} sdc.dcae.plugin.simpledemo.onap.org
+  delegate_to: localhost
+  
+- name: generate cluster config file
+  ansible.builtin.copy:
+    dest: "{{ playbook_dir }}/vars/cluster.yml"
+    content: |
+      oom_cluster_ip: {{ first_node_ip }}
+      onap_namespace: {{ onap_namespace }}
+      openstack_tenant_id: {{ openstack_tenant_id }}
+      openstack_tenant_name: {{ openstack_tenant_name }}
+      deployment_type: {{ deployment_type }}
+  delegate_to: localhost

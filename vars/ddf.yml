@@ -1,0 +1,18 @@
+---
+datacenter:
+  id: DL-DELL
+  code: DL-DELL
+  url: http://dl-control.sdp.telekom.de/
+  name: Darmstadt Dell Lab
+  type: datacenter
+  street1: Deutsche-Telekom-Allee 1
+  street2:
+  city: Darmstadt
+  state: Germany
+  postal_code: 64295
+  country: Hessen
+  region: Europe
+  latitude: 49.865940
+  longitude: 8.626236
+  elevation: 92
+  lata: "02"

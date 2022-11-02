@@ -1,0 +1,71 @@
+---
+- name: retrieve istio-ingressgateway device information
+  command: "kubectl get svc -o json -n istio-system istio-ingressgateway"
+  register: ingress_gw
+  changed_when: "false"
+  when: use_servicemesh
+
+- name: get IP of portal loadbalancer
+  ansible.builtin.set_fact:
+    first_node_ip: "{{
+      (ingress_gw.stdout|from_json).status.loadBalancer.ingress.0.ip }}"
+  when: use_servicemesh
+
+- name: retrieve portal device information
+  command: "kubectl get svc -o json -n {{ onap_namespace }} portal-app"
+  register: portal
+  changed_when: "false"
+  when: portal_enabled and not use_servicemesh
+
+- name: get IP of portal loadbalancer
+  ansible.builtin.set_fact:
+    portal_lb: "{{
+      (portal.stdout|from_json).status.loadBalancer.ingress.0.ip }}"
+  ignore_errors: yes
+  register: portal_lb_ip
+  when: portal_enabled and not use_servicemesh
+
+- name: get external IP of portal loadbalancer
+  ansible.builtin.set_fact:
+    portal_lb: "{{ (portal.stdout|from_json).spec.externalIPs.0 }}"
+  ignore_errors: "yes"
+  register: portal_external_ip_check
+  when: portal_enabled and and not use_servicemesh and ((portal_lb_ip is not defined) or
+            (portal_lb_ip|length == 0))
+
+- name: "[Facts retrieved] get first node IP address (case ip not defined)"
+  ansible.builtin.set_fact:
+    first_node_ip: "{{
+      hostvars[groups['kube-node'].0].ansible_default_ipv4.address }}"
+  when: gather_nodes_fact and not use_servicemesh
+
+- name: "[No Facts retrieved] get first node IP address (case ip not defined)"
+  ansible.builtin.set_fact:
+    first_node_ip: "{{ hostvars[groups['kube-node'].0].ip }}"
+  when: not gather_nodes_fact and not use_servicemesh
+
+- block:
+    - name: list all used ips
+      ansible.builtin.set_fact:
+        used_ips: "{{ used_ips|default([]) + [
+          hostvars[item].ansible_default_ipv4.address ~ '/' ~
+          ((hostvars[item].ansible_default_ipv4.network ~ '/' ~
+          hostvars[item].ansible_default_ipv4.netmask) |
+          ipaddr('prefix'))
+          ] }}"
+      loop: "{{ groups['k8s-cluster'] }}"
+    - name: generate network in ipaddr type
+      ansible.builtin.set_fact:
+        network: "{{ (ansible_default_ipv4.network ~ '/' ~
+          ansible_default_ipv4.netmask) | ipaddr('net') }}"
+    - name: generate the list of addresses in network
+      ansible.builtin.set_fact:
+        addresses: "{{ addresses|default([]) + [network | ipaddr(item)] }}"
+      loop: "{{ range(1, network | ipaddr('size') - 1) | list }}"
+
+    - name: pick a random address for portal
+      ansible.builtin.set_fact:
+        portal_lb: "{{ addresses | difference(used_ips) | random }}"
+  when: gather_nodes_fact and
+    portal_enabled and not use_servicemesh and
+    ((portal_lb_ip is not defined) or (portal_lb_ip|length == 0))

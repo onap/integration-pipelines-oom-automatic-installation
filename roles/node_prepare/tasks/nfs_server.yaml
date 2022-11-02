@@ -1,0 +1,47 @@
+---
+- name: apply distribution specific tasks
+  include_tasks: "nfs_server_{{ ansible_os_family | upper }}.yaml"
+  when: >
+    ansible_os_family | lower == "debian" or
+    ansible_os_family | lower == "coreos"
+
+- name: retrieve server pdf information
+  ansible.builtin.set_fact:
+    server_pdf:
+      "{{ nodes | selectattr('name', 'in', inventory_hostname) | first }}"
+
+- name: create nfs volume
+  include_role:
+    name: create_disk
+  vars:
+    disks: "{{ server_pdf.disks }}"
+    disk_purpose: nfs
+    mount_path: "{{ nfs_folder }}"
+    force_full_erase: False
+  when: (server_pdf.disks | selectattr('name', 'eq', 'disk-nfs') |
+         list | length) > 0
+
+- name: Create mountable dir
+  become: "yes"
+  ansible.builtin.file:
+    path: "{{ nfs_folder }}"
+    state: directory
+    mode: 0777
+    owner: root
+    group: root
+
+- name: create file in order that nfs server is happy...
+  become: "yes"
+  ansible.builtin.file:
+    path: "{{ nfs_folder }}/do_not_remove"
+    state: touch
+
+- name: copy /etc/exports
+  become: "yes"
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    owner: root
+    group: root
+    regexp: "^{{ nfs_folder }}"
+    line: "{{ nfs_folder }}   *(rw,async,no_root_squash,no_subtree_check)"
+  notify: restart nfs server

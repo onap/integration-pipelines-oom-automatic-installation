@@ -1,0 +1,9 @@
+oom_onap_version: "{{ lookup('env','ONAP_HELM_VERSION') |
+  default('v3.0.0', true) }}"
+onap_timeout: 900
+
+helm_env: {}
+
+helm_env_postgres:
+  HELM_DRIVER: sql
+  HELM_DRIVER_SQL_CONNECTION_STRING: "{{ postgres_url }}"

@@ -1,0 +1,8 @@
+---
+- name: "[Debian] Ensure NFS utilities are installed."
+  include_role:
+    name: apt_install
+  vars:
+    environment: "{{ proxy_env }}"
+    packages:
+      - nfs-common
