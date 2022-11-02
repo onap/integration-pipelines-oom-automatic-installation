@@ -1,0 +1,25 @@
+---
+ci_packages:
+  - jq
+  - build-essential
+  - libffi-dev
+  - git
+  - python3-pip
+  - rsync
+ci_python2_packages:
+  - openshift
+  - openstacksdk==0.43.0
+  - shade==1.33.0
+  - os-client-config==2.0.0
+  - python-openstackclient==5.1.0
+  - jsonschema
+ci_python3_packages:
+  - openshift==0.11.2
+  - stevedore==1.32.0
+  - dogpile.cache==0.6.5
+  - openstacksdk==0.43.0
+  - shade==1.33.0
+  - os-client-config==2.0.0
+  - python-openstackclient==5.2.1
+  - python-heatclient==1.18.0
+  - jsonschema

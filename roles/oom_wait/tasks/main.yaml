@@ -1,0 +1,40 @@
+---
+- name: wait for all containers to be started
+  shell:
+    "set -o pipefail && \
+     kubectl get po -n {{ onap_namespace }} | \
+     grep -c ContainerCreating || true"
+  args:
+    executable: /bin/bash
+  register: kube
+  changed_when:
+    kube.stdout == '0'
+  until:
+    kube.stdout == '0'
+  retries: 1000
+  delay: 10
+
+- name: wait for all containers to be initialized
+  shell:
+    "set -o pipefail && \
+     kubectl get po -n {{ onap_namespace }} | \
+     grep Init | grep -cv Error || true"
+  args:
+    executable: /bin/bash
+  register: kube
+  changed_when:
+    kube.stdout == '0'
+  until:
+    kube.stdout == '0'
+  retries: 1000
+  delay: 10
+
+- name: get result
+  shell:
+    "kubectl get po -n {{ onap_namespace }}"
+  changed_when: "false"
+  register: kube
+
+- name: show result
+  ansible.builtin.debug:
+    msg: "{{ kube.stdout }}"

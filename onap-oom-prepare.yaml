@@ -1,0 +1,16 @@
+---
+- hosts: k8s-cluster, nfs-server
+  gather_facts: no
+  vars_files:
+    - "vars/pdf.yml"
+    - "vars/idf.yml"
+  roles:
+    - node_prepare
+
+- hosts: kube-master
+  vars_files:
+    - "vars/pdf.yml"
+    - "vars/idf.yml"
+  roles:
+    - orange.os_infra_manager.cloud
+    - oom_prepare
