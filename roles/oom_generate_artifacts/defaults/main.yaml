@@ -1,0 +1,7 @@
+---
+aai_server: aai.api.sparky.simpledemo.onap.org
+aai_port: 30233
+aai_user: AAI
+aai_password: AAI
+msb_server: msb.api.simpledemo.onap.org
+msb_port: 30280

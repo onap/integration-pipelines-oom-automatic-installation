@@ -1,0 +1,40 @@
+---
+- set_fact:
+    base_dir: "{{ lookup('env', 'ROOT_FOLDER') | default(playbook_dir, true) }}"
+
+- name: check if vaulted ssh credentials exists
+  stat:
+    path: "{{ base_dir }}/vars/vaulted_ssh_credentials.yml"
+  register: creds_stat
+
+- name: include vaulted ssh credentials
+  include_vars: "{{ base_dir }}/vars/vaulted_ssh_credentials.yml"
+  when: creds_stat.stat.exists
+
+- name: check if vaulted ssh_gateways file exists
+  stat:
+    path: "{{ base_dir }}/vars/ssh_gateways.yml"
+  register: gw_stat
+
+- name: include vaulted ssh gateways
+  include_vars: "{{ base_dir }}/vars/ssh_gateways.yml"
+  when: gw_stat.stat.exists
+
+- name: create id_rsa file
+  copy:
+    dest: "{{ base_dir }}/id_rsa"
+    content: "{{ ssh_id_rsa }}"
+    mode: 0600
+  when: creds_stat.stat.exists
+
+- name: create id_rsa.pub file
+  copy:
+    dest: "{{ base_dir }}/id_rsa.pub"
+    content: "{{ ssh_id_rsa_pub }}"
+    mode: 0600
+  when: creds_stat.stat.exists
+
+- name: generate ssh config
+  template:
+    src: config.j2
+    dest: "{{ base_dir }}/ssh_config"
