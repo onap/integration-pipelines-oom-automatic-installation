@@ -1,0 +1,26 @@
+diff --git a/kubernetes/common/dgbuilder/templates/deployment.yaml b/kubernetes/common/dgbuilder/templates/deployment.yaml
+index 353c2314..990e5e2c 100644
+--- a/kubernetes/common/dgbuilder/templates/deployment.yaml
++++ b/kubernetes/common/dgbuilder/templates/deployment.yaml
+@@ -50,7 +50,7 @@ spec:
+           image: "{{ include "common.repository" . }}/{{ .Values.image }}"
+           imagePullPolicy: {{ .Values.global.pullPolicy | default .Values.pullPolicy }}
+           command: ["/bin/bash"]
+-          args: ["-c", "cd /opt/onap/ccsdk/dgbuilder/ && ./start.sh sdnc1.0 && wait"]
++          args: ["-c", "cd /opt/onap/ccsdk/dgbuilder/ && npm set registry '[{[{lookup('env','OFFLINE_REPOSITORY')}]}]' && ./start.sh sdnc1.0 && wait"]
+           ports:
+           - containerPort: {{ .Values.service.internalPort }}
+           readinessProbe:
+diff --git a/kubernetes/sdnc/charts/sdnc-portal/templates/deployment.yaml b/kubernetes/sdnc/charts/sdnc-portal/templates/deployment.yaml
+index 35dffee5..9bedc2d2 100644
+--- a/kubernetes/sdnc/charts/sdnc-portal/templates/deployment.yaml
++++ b/kubernetes/sdnc/charts/sdnc-portal/templates/deployment.yaml
+@@ -50,7 +50,7 @@ spec:
+       containers:
+         - name: {{ include "common.name" . }}
+           command: ["/bin/bash"]
+-          args: ["-c", "cd /opt/onap/sdnc/admportal/shell && ./start_portal.sh"]
++          args: ["-c", "cd /opt/onap/sdnc/admportal/shell && npm set registry '[{[{lookup('env','OFFLINE_REPOSITORY')}]}]' && ./start_portal.sh"]
+           image: "{{ include "common.repository" . }}/{{ .Values.image }}"
+           imagePullPolicy: {{ .Values.global.pullPolicy | default .Values.pullPolicy }}
+           ports:

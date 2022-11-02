@@ -1,0 +1,42 @@
+---
+- name: "[HELM2] list previously installed components"
+  shell: |
+    set -o pipefail && helm list -a | awk '{print $1}' |
+      grep {{ chart_name }}- || true
+  args:
+    executable: /bin/bash
+  register: components
+  changed_when: "false"
+
+- name: "[HELM2] remove previously installed components"
+  command:
+    "helm undeploy {{ item }} --purge"
+  loop: "{{ components.stdout_lines }}"
+  register: helm_undeploy
+  async: 900
+  poll: 0
+
+- name: "[HELM2] Wait for component deletion"
+  ansible.builtin.async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: _jobs
+  until: _jobs.finished
+  delay: 5
+  retries: 300
+  loop: "{{ helm_undeploy.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: "[HELM2] check if an onap installation has been launched before"
+  shell: |
+    set -o pipefail && helm list -a | awk '{print $1}' |
+      grep -c {{ chart_name }} || true
+  args:
+    executable: /bin/bash
+  register: launched
+  changed_when: "false"
+
+- name: "[HELM2] remove previous installation"
+  command:
+    "helm undeploy {{ chart_name }} --purge"
+  when: launched.stdout != '0'

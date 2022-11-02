@@ -1,0 +1,37 @@
+---
+openstack_tenant_name:
+  "{{ lookup('env','VNFS_TENANT_NAME') |
+      default(os_infra.tenant.name, true) }}"
+openstack_user_name:
+  "{{ lookup('env','VNFS_USER_NAME') |
+      default(os_infra.user.name, true) }}"
+openstack_service_tenant_name: service
+
+component_enabled:
+  appc: "{{ 'appc' in additional_components }}"
+  a1policymanagement: "{{ medium_onap or ('a1policymanagement' in additional_components) }}"
+  clamp: "{{ medium_onap or ('clamp' in additional_components) }}"
+  cli: "{{ small_onap or medium_onap or ('cli' in additional_components) }}"
+  consul: "{{ small_onap or medium_onap or ('consul' in additional_components) }}"
+  cps: "{{ small_onap or medium_onap or ('cps' in additional_components) }}"
+  contrib: "{{ medium_onap or ('contrib' in additional_components) }}"
+  dcaegen2: "{{ medium_onap or ('dcaegen2' in additional_components) }}"
+  dcaegen2_services: "{{ medium_onap or ('dcaegen2_services' in additional_components) }}"
+  dcaemod: "{{ 'dcaemod' in additional_components }}"
+  esr: "{{ small_onap or  medium_onap or ('esr' in additional_components) }}"
+  holmes: "{{ medium_onap or ('holmes' in additional_components) }}"
+  log: "{{ small_onap or medium_onap or ('log' in additional_components) }}"
+  msb: "{{ small_onap or medium_onap or ('msb' in additional_components) }}"
+  multicloud: "{{ small_onap or medium_onap or ('multicloud' in additional_components) }}"
+  nbi: "{{ small_onap or medium_onap or ('nbi' in additional_components) }}"
+  oof: "{{ medium_onap or ('oof' in additional_components) }}"
+  policy: "{{ medium_onap or ('policy' in additional_components) }}"
+  pomba: "{{ medium_onap or ('pomba' in additional_components) }}"
+  portal: "{{ portal_enabled }}"
+  sniro_emulator: "{{ 'sniro_emulator' in additional_components }}"
+  uui: "{{ 'uui' in additional_components }}"
+  vfc: "{{ 'vfc' in additional_components }}"
+  vid: "{{ small_onap or  medium_onap or ('vid' in additional_components) }}"
+  vnfsdk: "{{ 'vnfsdk' in additional_components }}"
+  modeling: "{{ 'modeling' in additional_components }}"
+  cds: "{{ small_onap or medium_onap or ('cds' in additional_components) }}"

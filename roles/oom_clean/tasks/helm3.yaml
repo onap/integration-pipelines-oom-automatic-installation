@@ -1,0 +1,66 @@
+---
+- name: "[HELM3] retrieve helm postgres secret"
+  community.kubernetes.k8s_info:
+    api_version: v1
+    kind: Secret
+    name: "{{ postgres_secret_name }}"
+    namespace: "{{ postgres_namespace }}"
+  register: postgres_secrets
+  when: helmv3_use_sql|bool
+
+- name: "[HELM3] retrieve helm postrgres password"
+  set_fact:
+    postgres_password: "{{
+      postgres_secrets.resources[0].data['postgresql-password'] | b64decode }}"
+  when: helmv3_use_sql|bool
+
+- name: set helm environment with postgres
+  set_fact:
+    helm_env: "{{ helm_env_postgres }}"
+  when: helmv3_use_sql|bool
+
+- name: "[HELM3] list previously installed components"
+  shell: |
+    set -o pipefail && helm list -a -n {{ onap_namespace }} |
+      awk '{print $1}' | grep {{ chart_name }}- || true
+  args:
+    executable: /bin/bash
+  environment: "{{ helm_env }}"
+  register: components
+  changed_when: "false"
+
+- name: "[HELM3] remove previously installed components"
+  command:
+    "helm uninstall {{ item }} -n {{ onap_namespace }}"
+  loop: "{{ components.stdout_lines }}"
+  environment: "{{ helm_env }}"
+  register: helm_undeploy
+  async: 900
+  poll: 0
+
+- name: "[HELM3] Wait for component deletion"
+  ansible.builtin.async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: _jobs
+  until: _jobs.finished
+  delay: 5
+  retries: 300
+  loop: "{{ helm_undeploy.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: "[HELM3] check if an onap installation has been launched before"
+  shell: |
+    set -o pipefail && helm list -a -n {{ onap_namespace }} |
+      awk '{print $1}' | grep -c {{ chart_name }} || true
+  args:
+    executable: /bin/bash
+  environment: "{{ helm_env }}"
+  register: launched
+  changed_when: "false"
+
+- name: "[HELM3] remove previous installation"
+  command:
+    "helm uninstall {{ chart_name }} -n {{ onap_namespace }}"
+  environment: "{{ helm_env }}"
+  when: launched.stdout != '0'
