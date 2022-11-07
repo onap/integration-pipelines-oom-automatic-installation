@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1b66fe1c_45de2442",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8964f2e2_20d13de8",
+      "range": {
+        "startLine": 60,
+        "startChar": 10,
+        "endLine": 60,
+        "endChar": 21
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22082b40_a5246468",
         "filename": "README.md",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b1af19d8_2613865f",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22082b40_a5246468",
+      "range": {
+        "startLine": 97,
+        "startChar": 11,
+        "endLine": 97,
+        "endChar": 22
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ebbdbe9_61f84479",
         "filename": "README.md",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2022-11-02T09:43:00Z",
       "side": 1,
       "message": "Should strimzi and dbs be included in core?",
+      "range": {
+        "startLine": 147,
+        "startChar": 3,
+        "endLine": 147,
+        "endChar": 7
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f6b84a9_a7cd2ae4",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "No, same as there is no cassandra or maria db. There are listed ONAP components",
+      "parentUuid": "7ebbdbe9_61f84479",
       "range": {
         "startLine": 147,
         "startChar": 3,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "3a1126cd_aa04e0c2",
+        "filename": "inventory/group_vars/all.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "027de813_c42d9f34",
+      "range": {
+        "startLine": 27,
+        "startChar": 60,
+        "endLine": 27,
+        "endChar": 65
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4246df88_a1dc5d2e",
         "filename": "inventory/group_vars/all.yaml",
         "patchSetId": 2
@@ -105,6 +201,30 @@
       "writtenOn": "2022-11-02T09:43:00Z",
       "side": 1,
       "message": "Still relevant",
+      "range": {
+        "startLine": 85,
+        "startChar": 3,
+        "endLine": 85,
+        "endChar": 9
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fae2db7_98cfa336",
+        "filename": "inventory/group_vars/all.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "as long as portal is on oom - yes. Portal is disabled by default, but could be enable",
+      "parentUuid": "4246df88_a1dc5d2e",
       "range": {
         "startLine": 85,
         "startChar": 3,
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "aba45070_d814f5ff",
+        "filename": "inventory/group_vars/all.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3405e7ee_aa4f7cac",
+      "range": {
+        "startLine": 88,
+        "startChar": 67,
+        "endLine": 88,
+        "endChar": 71
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf4f10b4_b15c8de5",
         "filename": "inventory/group_vars/all.yaml",
         "patchSetId": 2
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "16ade268_2df1def9",
+        "filename": "inventory/group_vars/all.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bf4f10b4_b15c8de5",
+      "range": {
+        "startLine": 89,
+        "startChar": 51,
+        "endLine": 89,
+        "endChar": 53
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ddeffa3_1aaf439d",
         "filename": "roles/oom_clean/tasks/helm2.yaml",
         "patchSetId": 2
@@ -174,6 +342,30 @@
       "writtenOn": "2022-11-02T09:43:00Z",
       "side": 1,
       "message": "Still relevant?",
+      "range": {
+        "startLine": 2,
+        "startChar": 11,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2fa43a2_844de4dd",
+        "filename": "roles/oom_clean/tasks/helm2.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Deleted",
+      "parentUuid": "0ddeffa3_1aaf439d",
       "range": {
         "startLine": 2,
         "startChar": 11,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "3ecafd95_bdc82e3a",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "82ffe066_738c1495",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 7
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b717487c_2d4107ce",
         "filename": "roles/oom_configure/defaults/main.yaml",
         "patchSetId": 2
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "a5035c0f_cd3592da",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b717487c_2d4107ce",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 13,
+        "endChar": 6
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6011f379_838047bf",
         "filename": "roles/oom_configure/defaults/main.yaml",
         "patchSetId": 2
@@ -243,6 +483,30 @@
       "writtenOn": "2022-11-02T09:43:00Z",
       "side": 1,
       "message": "No longer deployed",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5948f2b4_73bc27ba",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "But can be - it;s still a part of OOM",
+      "parentUuid": "6011f379_838047bf",
       "range": {
         "startLine": 30,
         "startChar": 3,
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "c8a0a367_3e04ebb2",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Sane as avove",
+      "parentUuid": "6cfca6b4_63e1f77a",
+      "range": {
+        "startLine": 34,
+        "startChar": 2,
+        "endLine": 34,
+        "endChar": 6
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2dc5b80a_a8c72d50",
         "filename": "roles/oom_configure/tasks/main.yaml",
         "patchSetId": 2
@@ -289,6 +577,30 @@
       "writtenOn": "2022-11-02T09:43:00Z",
       "side": 1,
       "message": "Looking to remove this openstack stuff from documentation. Don\u0027t think we should mandate using opoenstack",
+      "range": {
+        "startLine": 107,
+        "startChar": 10,
+        "endLine": 107,
+        "endChar": 21
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ad822ed_f0169e74",
+        "filename": "roles/oom_configure/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Discussed on weekly - that\u0027s related with instantiation on tests",
+      "parentUuid": "2dc5b80a_a8c72d50",
       "range": {
         "startLine": 107,
         "startChar": 10,
@@ -370,6 +682,30 @@
     },
     {
       "key": {
+        "uuid": "e8134d7b_5efb660c",
+        "filename": "roles/oom_generate_artifacts/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Shouldn\u0027t as Andreas works on these pipelines on gating",
+      "parentUuid": "b6d283e7_d212a84a",
+      "range": {
+        "startLine": 3,
+        "startChar": 11,
+        "endLine": 3,
+        "endChar": 15
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af3ea16a_638df1a7",
         "filename": "roles/oom_generate_artifacts/tasks/loadbalancer_facts.yaml",
         "patchSetId": 2
@@ -381,6 +717,30 @@
       "writtenOn": "2022-11-02T09:43:00Z",
       "side": 1,
       "message": "Is portal still relevant?",
+      "range": {
+        "startLine": 8,
+        "startChar": 18,
+        "endLine": 8,
+        "endChar": 24
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0f416e7_428fb74e",
+        "filename": "roles/oom_generate_artifacts/tasks/loadbalancer_facts.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "it\u0027s still on oom - if we remove that from oom then we can remove that here. I think it\u0027s still possible to enable portal on oom and then we can have problems here",
+      "parentUuid": "af3ea16a_638df1a7",
       "range": {
         "startLine": 8,
         "startChar": 18,
@@ -416,6 +776,30 @@
     },
     {
       "key": {
+        "uuid": "8bec86ad_d0a1dd81",
+        "filename": "roles/oom_launch/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37a6f465_ae4d03ce",
+      "range": {
+        "startLine": 147,
+        "startChar": 13,
+        "endLine": 147,
+        "endChar": 17
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a9b0658_1c491190",
         "filename": "roles/oom_prepare/tasks/main.yaml",
         "patchSetId": 2
@@ -436,6 +820,30 @@
       "revId": "28b867837bda766207cac813314f7ad476d62f2b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe5e00c5_b751cb98",
+        "filename": "roles/oom_prepare/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-11-07T07:27:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a9b0658_1c491190",
+      "range": {
+        "startLine": 131,
+        "startChar": 13,
+        "endLine": 131,
+        "endChar": 17
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
