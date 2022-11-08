@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ff181d0_32253475",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "I think strimzi should be included in this list",
+      "range": {
+        "startLine": 141,
+        "startChar": 37,
+        "endLine": 141,
+        "endChar": 38
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d36bc994_a8543bc0",
+        "filename": "roles/oom_configure/templates/clamp-overrides.yaml.j2",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "Pretty sure clamp is now defunct",
+      "range": {
+        "startLine": 2,
+        "startChar": 1,
+        "endLine": 2,
+        "endChar": 6
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1e388a3_5959ea97",
+        "filename": "roles/oom_configure/templates/onap-overrides.yaml.j2",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "MR uses strimzi\u0027s kafka as it\u0027s backend now",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 15
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13ae8f80_0f0a65f3",
+        "filename": "roles/oom_prepare/tasks/main.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "This seems to be repeated a few times across diff files. Is it needed?",
+      "range": {
+        "startLine": 115,
+        "startChar": 9,
+        "endLine": 115,
+        "endChar": 21
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fc46da7_eaab483a",
+        "filename": "roles/oom_prepare/tasks/main.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "Could the specific version be abstracted to a single file somehow maybe?",
+      "range": {
+        "startLine": 188,
+        "startChar": 43,
+        "endLine": 188,
+        "endChar": 49
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2138d7f2_795fec8a",
+        "filename": "roles/oom_prepare/tasks/main.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "Do we need to keep this?",
+      "range": {
+        "startLine": 219,
+        "startChar": 5,
+        "endLine": 220,
+        "endChar": 17
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30fa80da_05ba278b",
+        "filename": "roles/oom_prepare/templates/oom_patch.txt.j2",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "Do we need to keep this? What is it\u0027s purpose?",
+      "range": {
+        "startLine": 1,
+        "startChar": 15,
+        "endLine": 1,
+        "endChar": 23
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86d179a7_8412d247",
+        "filename": "roles/prepare_ci/tasks/main.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "Is this still an issue?",
+      "range": {
+        "startLine": 24,
+        "startChar": 34,
+        "endLine": 24,
+        "endChar": 42
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98ee33cd_53421526",
+        "filename": "roles/prepare_ci/vars/debian.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "Do we still need python2?",
+      "range": {
+        "startLine": 9,
+        "startChar": 6,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55af48ab_af67a67e",
+        "filename": "vars/ddf.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-08T11:04:57Z",
+      "side": 1,
+      "message": "This is specific to DT lab right?\nWill this always be the case?",
+      "range": {
+        "startLine": 5,
+        "startChar": 32,
+        "endLine": 5,
+        "endChar": 39
+      },
+      "revId": "b4802be6d72324c2bc0aaeb34c582c773365ff90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
