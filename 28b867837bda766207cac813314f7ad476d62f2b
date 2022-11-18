@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "26654796_7ef9d249",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-18T11:15:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4f6b84a9_a7cd2ae4",
+      "range": {
+        "startLine": 147,
+        "startChar": 3,
+        "endLine": 147,
+        "endChar": 7
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "027de813_c42d9f34",
         "filename": "inventory/group_vars/all.yaml",
         "patchSetId": 2
@@ -234,6 +258,30 @@
       "revId": "28b867837bda766207cac813314f7ad476d62f2b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9166ef8a_c08a67d8",
+        "filename": "inventory/group_vars/all.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-18T11:15:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2fae2db7_98cfa336",
+      "range": {
+        "startLine": 85,
+        "startChar": 3,
+        "endLine": 85,
+        "endChar": 9
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -378,6 +426,30 @@
     },
     {
       "key": {
+        "uuid": "046f34b7_849fed42",
+        "filename": "roles/oom_clean/tasks/helm2.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-18T11:15:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f2fa43a2_844de4dd",
+      "range": {
+        "startLine": 2,
+        "startChar": 11,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82ffe066_738c1495",
         "filename": "roles/oom_configure/defaults/main.yaml",
         "patchSetId": 2
@@ -519,6 +591,30 @@
     },
     {
       "key": {
+        "uuid": "5172f47e_ef96044c",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-18T11:15:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5948f2b4_73bc27ba",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6cfca6b4_63e1f77a",
         "filename": "roles/oom_configure/defaults/main.yaml",
         "patchSetId": 2
@@ -566,6 +662,30 @@
     },
     {
       "key": {
+        "uuid": "81f8877b_d4e1d08e",
+        "filename": "roles/oom_configure/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-18T11:15:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c8a0a367_3e04ebb2",
+      "range": {
+        "startLine": 34,
+        "startChar": 2,
+        "endLine": 34,
+        "endChar": 6
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dc5b80a_a8c72d50",
         "filename": "roles/oom_configure/tasks/main.yaml",
         "patchSetId": 2
@@ -610,6 +730,30 @@
       "revId": "28b867837bda766207cac813314f7ad476d62f2b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "744e4e6c_30f2d73f",
+        "filename": "roles/oom_configure/tasks/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-18T11:15:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7ad822ed_f0169e74",
+      "range": {
+        "startLine": 107,
+        "startChar": 10,
+        "endLine": 107,
+        "endChar": 21
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -706,6 +850,30 @@
     },
     {
       "key": {
+        "uuid": "659d5d77_3b97bb38",
+        "filename": "roles/oom_generate_artifacts/defaults/main.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-18T11:15:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e8134d7b_5efb660c",
+      "range": {
+        "startLine": 3,
+        "startChar": 11,
+        "endLine": 3,
+        "endChar": 15
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af3ea16a_638df1a7",
         "filename": "roles/oom_generate_artifacts/tasks/loadbalancer_facts.yaml",
         "patchSetId": 2
@@ -750,6 +918,30 @@
       "revId": "28b867837bda766207cac813314f7ad476d62f2b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "705431d3_0d20c588",
+        "filename": "roles/oom_generate_artifacts/tasks/loadbalancer_facts.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-11-18T11:15:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a0f416e7_428fb74e",
+      "range": {
+        "startLine": 8,
+        "startChar": 18,
+        "endLine": 8,
+        "endChar": 24
+      },
+      "revId": "28b867837bda766207cac813314f7ad476d62f2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
