@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Fiachra Corcoran <fiachra.corcoran@est.tech>
+Code-Review+2: Andreas Geissler <andreas-geissler@telekom.de>
+Submitted-by: Andreas Geissler <andreas-geissler@telekom.de>
+Submitted-at: Fri, 09 Dec 2022 10:15:04 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/integration/pipelines/oom-automatic-installation/+/131947
+Project: integration/pipelines/oom-automatic-installation
+Branch: refs/heads/master
